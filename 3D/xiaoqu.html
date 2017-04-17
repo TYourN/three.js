@@ -1,0 +1,2337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+  #mainCanvas{margin:0 auto};
+</style>
+<script type="text/javascript" src="three.js"></script>
+<script src="js/three.min.js"></script>
+<script type="text/javascript" src="lib/stats.min.js"></script>
+<script type="text/javascript" src="libs/OBJLoader.js"></script>
+<script type="text/javascript" src="lib/TrackballControls.js"></script>
+<script type="text/javascript" src="lib/Mirror.js"></script>
+<script type="text/javascript" src="lib/WaterShader.js"></script>
+<script src="js/controls/OrbitControls.js"></script>
+<script src="js/ThreeBSP.js"></script>
+<script type="text/javascript">
+   var scene = null;
+   var camera = null;
+   var renderer = null;
+   var axis=null;
+   var id=null;
+   function updateControls() {
+            controls.update();
+   }
+   function init(){
+	   //画布的长和宽获取
+	   width=document.documentElement.clientWidth;
+	   height=document.documentElement.clientHeight;
+	   
+       //渲染器属性设置
+	   renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('mainCanvas')
+       });
+	   renderer.setSize(width,height);
+	   renderer.setClearColor(0xFFFFFF, 1.0);  
+	   scene = new THREE.Scene(); 
+	   
+	   //照相机属性定义
+	   camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
+	   camera.position.set(75,40,15);
+	   camera.lookAt(new THREE.Vector3(0, 0, 0));
+	    controls = new THREE.OrbitControls( camera );
+            controls.addEventListener( 'change', updateControls );
+       scene.add(camera);
+	   
+	   //光源属性定义
+	   light= new THREE.DirectionalLight(0xFF0000,1);
+	   light.position.set(0,0,1);  
+       scene.add(light);
+	   
+	   //axis = new THREE.AxisHelper(20);
+	   //scene.add(axis); 
+	   //地板属性设置
+	   var floor  = new THREE.BoxGeometry(100, 100, 1);
+	   var floorMaterial = new THREE.MeshBasicMaterial( {color: '#87CEEB', wireframe: false });
+	   var texture=THREE.ImageUtils.loadTexture("floor.jpg",null,function(t){});
+	   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;  
+       texture.repeat.set(40, 40);  
+       var material = new THREE.MeshBasicMaterial({map:texture});  
+       var floorCube = new THREE.Mesh( floor, material );  
+       scene.add( floorCube );  
+       floorCube.rotation.x += 0.5*Math.PI;  
+	   
+	   
+	   //楼房1属性设置
+	   var cubeGeometry1= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry11= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry21= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry31= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry41= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry2= new THREE.BoxGeometry(2,29,8);
+	   var cubeGeometry3= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry13= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry23= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry33= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry43= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry4= new THREE.BoxGeometry(2,29,8);
+	   var cubeGeometry5= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry15= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry25= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry35= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry45= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry6= new THREE.BoxGeometry(2,29,8);
+	   var cubeGeometry7= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry17= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry27= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry37= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometry47= new THREE.BoxGeometry(6, 3, 5);
+	   var cubeGeometryExtra= new THREE.BoxGeometry(6, 1, 5);
+	   var cubeGeometryEx= new THREE.BoxGeometry(6, 0.5, 6);
+	   var cubeGeometryWater= new THREE.BoxGeometry(2, 0.5, 2);
+	   var cubeGeometryDoor= new THREE.BoxGeometry(2,4,1.5);
+	   var cubeGeometryElec=new THREE.BoxGeometry(10,6,10);
+	   var cubeGeometryGlass=new THREE.BoxGeometry(25,0.8,13);
+	   var matArray1=[];
+	   var matArray2=[];
+	   var matArray3=[];
+	   var matArray4=[];
+	   var matArray5=[];
+	   var matArray6=[];
+	   var matArray7=[];
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan2.png')
+	   }));
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan2.png')
+	   }));
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan2.png')
+	   }));
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan2.png')
+	   }));
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('window.png')
+	   }));
+	   matArray1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan2.png')
+	   }));
+	   
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray3.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/gang.png')
+	   }));
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/gang.png')
+	   }));
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('timg.jpg')
+	   }));
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/gang.png')
+	   }));
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/gang.png')
+	   }));
+	   matArray4.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/gang.png')
+	   }));
+	   
+	    matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/door.png')
+	   }));
+	   matArray5.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan3.png')
+	   }));
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan3.png')
+	   }));
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan3.png')
+	   }));
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan3.png')
+	   }));
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/door2.png')
+	   }));
+	   matArray6.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/zhuan3.png')
+	   }));
+	   
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/glass.png')
+	   }));
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   matArray7.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	   }));
+	   
+	   var faceMaterial1= new THREE.MeshFaceMaterial(matArray1);
+	   var faceMaterial2= new THREE.MeshFaceMaterial(matArray2);
+	   var faceMaterialExtra= new THREE.MeshFaceMaterial(matArray3);
+	   var faceMaterialWater= new THREE.MeshFaceMaterial(matArray4);
+	   var faceMaterialDoor= new THREE.MeshFaceMaterial(matArray5);
+	   var faceMaterialElec= new THREE.MeshFaceMaterial(matArray6);
+	   var faceMaterialGlass= new THREE.MeshFaceMaterial(matArray7);
+	   
+	   var cubeExtra1=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra2=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra3=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra4=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   
+	   var cubeEx1=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx2=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx3=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx4=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx5=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx6=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx7=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx8=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx9=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx10=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx11=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx12=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx13=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx14=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx15=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx16=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx17=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx18=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx19=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx20=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx21=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx22=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx23=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx24=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx25=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx26=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx27=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx28=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   
+	   var cube1 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube11 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube21 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube31 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube41 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube51 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube61 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube71 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube2=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+	   var cube3=new THREE.Mesh(cubeGeometry3,faceMaterial1);
+	   var cube13 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube23 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube33 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube43 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube53 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube63 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube73 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube4=new THREE.Mesh(cubeGeometry4,faceMaterial2);
+	   var cube5=new THREE.Mesh(cubeGeometry5,faceMaterial1);
+	   var cube15 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube25 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube35 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube45 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube55 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube65 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube75 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube6=new THREE.Mesh(cubeGeometry6,faceMaterial2);
+	   var cube7=new THREE.Mesh(cubeGeometry7,faceMaterial1);
+	   var cube17 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube27 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube37 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube47 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube57 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube67 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube77 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   
+	   var cubeWater1=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater2=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater3=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater4=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   
+	   var cubeDoor1=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor2=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor3=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   
+	   var cubeElec1=new THREE.Mesh(cubeGeometryElec,faceMaterialElec);
+	   
+	   var cubeGlass1=new THREE.Mesh(cubeGeometryGlass,faceMaterialGlass);
+	   var cubeGlass2=new THREE.Mesh(cubeGeometryGlass,faceMaterialGlass);
+	   
+	   cube1.position.x = -29;
+	   cubeExtra1.position.x=-29;
+	   cubeEx1.position.x=-30;
+	   cubeEx5.position.x=-30;
+	   cubeEx9.position.x=-30;
+	   cubeEx13.position.x=-30;
+	   cubeEx17.position.x=-30;
+	   cubeEx21.position.x=-30;
+	   cubeEx25.position.x=-30;
+	   cube11.position.x = -29;
+	   cube21.position.x = -29;
+	   cube31.position.x = -29;
+	   cube41.position.x = -29;
+	   cube51.position.x = -29;
+	   cube61.position.x = -29;
+	   cube71.position.x = -29;
+	   cubeWater1.position.x=-29;
+	   cube2.position.x=-26;
+	   cubeDoor1.position.x=-26;
+	   cube3.position.x=-24;
+	   cubeExtra2.position.x=-24;
+	   cubeEx2.position.x=-24;
+	   cubeEx6.position.x=-24;
+	   cubeEx10.position.x=-24;
+	   cubeEx14.position.x=-24;
+	   cubeEx18.position.x=-24;
+	   cubeEx22.position.x=-24;
+	   cubeEx26.position.x=-24;
+	   cube13.position.x = -24;
+	   cube23.position.x = -24;
+	   cube33.position.x = -24;
+	   cube43.position.x = -24;
+	   cube53.position.x = -24;
+	   cube63.position.x = -24;
+	   cube73.position.x = -24;
+	   cubeWater2.position.x=-24;  
+	   cube4.position.x=-20;
+	   cubeDoor2.position.x=-20;
+	   cube5.position.x=-17;
+	   cubeExtra3.position.x=-17;
+	   cubeEx3.position.x=-17;
+	   cubeEx7.position.x=-17;
+	   cubeEx11.position.x=-17;
+	   cubeEx15.position.x=-17;
+	   cubeEx19.position.x=-17;
+	   cubeEx23.position.x=-17;
+	   cubeEx27.position.x=-17;
+	   cube15.position.x = -17;
+	   cube25.position.x = -17;
+	   cube35.position.x = -17;
+	   cube45.position.x = -17;
+	   cube55.position.x = -17;
+	   cube65.position.x = -17;
+	   cube75.position.x = -17;
+	   cubeWater3.position.x=-17;	   
+	   cube6.position.x=-14;
+	   cubeDoor3.position.x=-14;
+	   cube7.position.x=-11;
+	   cubeExtra4.position.x=-11;
+	   cubeEx4.position.x=-10;
+	   cubeEx8.position.x=-10;
+	   cubeEx12.position.x=-10;
+	   cubeEx16.position.x=-10;
+	   cubeEx20.position.x=-10;
+	   cubeEx24.position.x=-10;
+	   cubeEx28.position.x=-10;
+	   cube17.position.x = -11;
+	   cube27.position.x = -11;
+	   cube37.position.x = -11;
+	   cube47.position.x = -11;
+	   cube57.position.x = -11;
+	   cube67.position.x = -11;
+	   cube77.position.x = -11;
+	   cubeWater4.position.x=-11;	   
+	   cubeElec1.position.x=10;
+	   cubeGlass1.position.x=-20;
+	   cubeGlass2.position.x=-20;
+	   
+       cube1.position.y = 3;
+	   cubeExtra1.position.y = 1;
+	   cubeEx1.position.y = 4.75;
+	   cubeEx5.position.y=8.25;
+	   cubeEx9.position.y=11.5;
+	   cubeEx13.position.y=14.75;
+	   cubeEx17.position.y=18;
+	   cubeEx21.position.y=21.25;
+	   cubeEx25.position.y=24.5;
+	   cube11.position.y = 6.5;
+	   cube21.position.y = 9.75;
+	   cube31.position.y = 13;
+	   cube41.position.y = 16.25;
+	   cube51.position.y = 19.5;
+	   cube61.position.y = 22.75;
+	   cube71.position.y = 26;
+	   cubeWater1.position.y=27.75;	   
+	   cube2.position.y = 14.5;
+	   cubeDoor1.position.y = 2;
+	   cube3.position.y=3;
+	   cubeExtra2.position.y=1;
+	   cubeEx2.position.y = 4.75;
+	   cubeEx6.position.y=8.25;
+	   cubeEx10.position.y=11.5;
+	   cubeEx14.position.y=14.75;
+	   cubeEx18.position.y=18;
+	   cubeEx22.position.y=21.25;
+	   cubeEx26.position.y=24.5;
+	   cube13.position.y = 6.5;
+	   cube23.position.y = 9.75;
+	   cube33.position.y = 13;
+	   cube43.position.y = 16.25;
+	   cube53.position.y = 19.5;
+	   cube63.position.y = 22.75;
+	   cube73.position.y = 26;
+	   cubeWater2.position.y=27.75;
+	   cube4.position.y = 14.5;
+	   cubeDoor2.position.y = 2;
+	   cube5.position.y=3;
+	   cubeExtra3.position.y=1;
+	   cubeEx3.position.y = 4.75;
+	   cubeEx7.position.y = 8.25;
+	   cubeEx11.position.y=11.5;
+	   cubeEx15.position.y=14.75;
+	   cubeEx19.position.y=18;
+	   cubeEx23.position.y=21.25;
+	   cubeEx27.position.y=24.5;
+	   cube15.position.y = 6.5;
+	   cube25.position.y = 9.75;
+	   cube35.position.y = 13;
+	   cube45.position.y = 16.25;
+	   cube55.position.y = 19.5;
+	   cube65.position.y = 22.75;
+	   cube75.position.y = 26;
+	   cubeWater3.position.y=27.75;
+	   cube6.position.y = 14.5;
+	   cubeDoor3.position.y = 2;
+	   cube7.position.y=3;
+	   cubeExtra4.position.y=1;
+	   cubeEx4.position.y = 4.75;
+	   cubeEx8.position.y = 8.25;
+	   cubeEx12.position.y=11.5;
+	   cubeEx16.position.y=14.75;
+	   cubeEx20.position.y=18;
+	   cubeEx24.position.y=21.25;
+	   cubeEx28.position.y=24.5;
+	   cube17.position.y = 6.5;
+	   cube27.position.y = 9.75;
+	   cube37.position.y = 13;
+	   cube47.position.y = 16.25;
+	   cube57.position.y = 19.5;
+	   cube67.position.y = 22.75;
+	   cube77.position.y = 26;
+	   cubeWater4.position.y=27.75;  
+	   cubeElec1.position.y=3;
+	   cubeGlass1.position.y=0.4;
+	   cubeGlass2.position.y=0.4;
+	   
+       cube1.position.z =1;
+	   cubeExtra1.position.z =1;
+	   cubeEx1.position.z =1;
+	   cubeEx5.position.z =1;
+	   cubeEx9.position.z =1;
+	   cubeEx13.position.z =1;
+	   cubeEx17.position.z =1;
+	   cubeEx21.position.z =1;
+	   cubeEx25.position.z =1;
+	   cube11.position.z =1;
+	   cube21.position.z =1;
+	   cube31.position.z =1;
+	   cube41.position.z =1;
+	   cube51.position.z =1;
+	   cube61.position.z =1;
+	   cube71.position.z =1;
+	   cubeWater1.position.z=1;   
+	   cube2.position.z =1;
+	   cubeDoor1.position.z =5.7;
+	   cube3.position.z=1;
+	   cubeExtra2.position.z =1;
+	   cubeEx2.position.z =1;
+	   cubeEx6.position.z =1;
+	   cubeEx10.position.z =1;
+	   cubeEx14.position.z =1;
+	   cubeEx18.position.z =1;
+	   cubeEx22.position.z =1;
+	   cubeEx26.position.z =1;
+	   cube13.position.z =1;
+	   cube23.position.z =1;
+	   cube33.position.z =1;
+	   cube43.position.z =1;
+	   cube53.position.z =1;
+	   cube63.position.z =1;
+	   cube73.position.z =1;
+	   cubeWater2.position.z=1;   
+	   cube4.position.z=1;
+	   cubeDoor2.position.z =5.7;
+	   cube5.position.z=1;
+	   cubeExtra3.position.z =1;
+	   cubeEx3.position.z =1;
+	   cubeEx7.position.z =1;
+	   cubeEx11.position.z =1;
+	   cubeEx15.position.z =1;
+	   cubeEx19.position.z =1;
+	   cubeEx23.position.z =1;
+	   cubeEx27.position.z =1;
+	   cube15.position.z =1;
+	   cube25.position.z =1;
+	   cube35.position.z =1;
+	   cube45.position.z =1;
+	   cube55.position.z =1;
+	   cube65.position.z =1;
+	   cube75.position.z =1;
+	   cubeWater3.position.z=1; 
+	   cube6.position.z=1;
+	   cubeDoor3.position.z =5.7;
+	   cube7.position.z=1;
+	   cubeExtra4.position.z =1;
+	   cubeEx4.position.z =1;
+	   cubeEx8.position.z =1;
+	   cubeEx12.position.z =1;
+	   cubeEx16.position.z =1;
+	   cubeEx20.position.z =1;
+	   cubeEx24.position.z =1;
+	   cubeEx28.position.z =1;
+	   cube17.position.z =1;
+	   cube27.position.z =1;
+	   cube37.position.z =1;
+	   cube47.position.z =1;
+	   cube57.position.z =1;
+	   cube67.position.z =1;
+	   cube77.position.z =1;
+	   cubeWater4.position.z=1;   
+	   cubeElec1.position.z=-25;
+	   cubeGlass1.position.z=15;
+	   cubeGlass2.position.z=-12;
+	   
+	    
+	   scene.add(cube1);
+	   scene.add(cubeExtra1);
+	   scene.add(cubeEx1);
+	   scene.add(cubeEx5);
+	   scene.add(cubeEx9);
+	   scene.add(cubeEx13);
+	   scene.add(cubeEx17);
+	   scene.add(cubeEx21);
+	   scene.add(cubeEx25);
+	   scene.add(cube11);
+	   scene.add(cube21);
+	   scene.add(cube31);
+	   scene.add(cube41);
+	   scene.add(cube51);
+	   scene.add(cube61);
+	   scene.add(cube71);
+	   scene.add(cubeWater1);   
+	   scene.add(cube2);
+	   scene.add(cubeDoor1);
+	   scene.add(cube3);
+	   scene.add(cubeExtra2);
+	   scene.add(cubeEx2);
+	   scene.add(cubeEx6);
+	   scene.add(cubeEx10);
+	   scene.add(cubeEx14);
+	   scene.add(cubeEx18);
+	   scene.add(cubeEx22);
+	   scene.add(cubeEx26);
+	   scene.add(cube13);
+	   scene.add(cube23);
+	   scene.add(cube33);
+	   scene.add(cube43);
+	   scene.add(cube53);
+	   scene.add(cube63);
+	   scene.add(cube73);
+	   scene.add(cubeWater2);   
+	   scene.add(cube4);
+	   scene.add(cubeDoor2);
+	   scene.add(cube5);
+	   scene.add(cubeExtra3);
+	   scene.add(cubeEx3);
+	   scene.add(cubeEx7);
+	   scene.add(cubeEx11);
+	   scene.add(cubeEx15);
+	   scene.add(cubeEx19);
+	   scene.add(cubeEx23);
+	   scene.add(cubeEx27);
+	   scene.add(cube15);
+	   scene.add(cube25);
+	   scene.add(cube35);
+	   scene.add(cube45);
+	   scene.add(cube55);
+	   scene.add(cube65);
+	   scene.add(cube75);
+	   scene.add(cubeWater3);	   
+	   scene.add(cube6);
+	   scene.add(cubeDoor3);
+	   scene.add(cube7);
+	   scene.add(cubeExtra4);
+	   scene.add(cubeEx4);
+	   scene.add(cubeEx8);
+	   scene.add(cubeEx12);
+	   scene.add(cubeEx16);
+	   scene.add(cubeEx20);
+	   scene.add(cubeEx24);
+	   scene.add(cubeEx28);
+	   scene.add(cube17);
+	   scene.add(cube27);
+	   scene.add(cube37);
+	   scene.add(cube47);
+	   scene.add(cube57);
+	   scene.add(cube67);
+	   scene.add(cube77);
+	   scene.add(cubeWater4);	   
+	   scene.add(cubeElec1);
+	   scene.add(cubeGlass1);
+	   scene.add(cubeGlass2);
+	   
+	   
+	   
+	   //楼房2属性设置   
+	   var cubeExtra11=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra21=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra31=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra41=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   
+	   var cubeEx11=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx21=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx31=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx41=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx51=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx61=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx71=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx81=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx91=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx101=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx111=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx121=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx131=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx141=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx151=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx161=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx171=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx181=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx191=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx201=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx211=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx221=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx231=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx241=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx251=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx261=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx271=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx281=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   
+	   var cube11 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube111 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube211 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube311 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube411 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube511 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube611 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube711 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube811 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube21=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+	   var cube31=new THREE.Mesh(cubeGeometry3,faceMaterial1);
+	   var cube131 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube231 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube331 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube431 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube531 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube631 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube731 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube831 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube41=new THREE.Mesh(cubeGeometry4,faceMaterial2);
+	   var cube51=new THREE.Mesh(cubeGeometry5,faceMaterial1);
+	   var cube151 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube251 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube351 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube451 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube551 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube651 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube751 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube851 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube61=new THREE.Mesh(cubeGeometry6,faceMaterial2);
+	   var cube71=new THREE.Mesh(cubeGeometry7,faceMaterial1);
+	   var cube171 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube271 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube371 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube471 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube571 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube671 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube771 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube871 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   
+	   var cubeWater11=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater21=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater31=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater41=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   
+	   var cubeDoor11=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor21=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor31=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   
+	   cube11.position.x = -29;
+	   cubeExtra11.position.x=-29;
+	   cubeEx11.position.x=-30;
+	   cubeEx51.position.x=-30;
+	   cube111.position.x = -29;
+	   cube211.position.x = -29;
+	   cube311.position.x = -29;
+	   cube411.position.x = -29;
+	   cube511.position.x = -29;
+	   cube611.position.x = -29;
+	   cube711.position.x = -29;
+	   cubeWater11.position.x=-29;
+	   cubeEx91.position.x=-30;
+	   cubeEx131.position.x=-30;
+	   cubeEx171.position.x=-30;
+	   cubeEx211.position.x=-30;
+	   cubeEx251.position.x=-30;
+	   cube21.position.x=-26;
+	   cubeDoor11.position.x=-26;
+	   cube31.position.x=-24;
+	   cubeExtra21.position.x=-24;
+	   cubeEx21.position.x=-24;
+	   cubeEx61.position.x=-24;
+	   cube131.position.x = -24;
+	   cube231.position.x = -24;
+	   cube331.position.x = -24;
+	   cube431.position.x = -24;
+	   cube531.position.x = -24;
+	   cube631.position.x = -24;
+	   cube731.position.x = -24;
+	   cubeWater21.position.x=-24;
+	   cubeEx101.position.x=-24;
+	   cubeEx141.position.x=-24;
+	   cubeEx181.position.x=-24;
+	   cubeEx221.position.x=-24;
+	   cubeEx261.position.x=-24;
+	   cube41.position.x=-20;
+	   cubeDoor21.position.x=-20;
+	   cube51.position.x=-17;
+	   cubeExtra31.position.x=-17;
+	   cubeEx31.position.x=-17;
+	   cubeEx71.position.x=-17;
+	   cube151.position.x = -17;
+	   cube251.position.x = -17;
+	   cube351.position.x = -17;
+	   cube451.position.x = -17;
+	   cube551.position.x = -17;
+	   cube651.position.x = -17;
+	   cube751.position.x = -17;
+	   cubeWater31.position.x=-17;
+	   cubeEx111.position.x=-17;
+	   cubeEx151.position.x=-17;
+	   cubeEx191.position.x=-17;
+	   cubeEx231.position.x=-17;
+	   cubeEx271.position.x=-17;
+	   cube61.position.x=-14;
+	   cubeDoor31.position.x=-14;
+	   cube71.position.x=-11;
+	   cubeExtra41.position.x=-11;
+	   cubeEx41.position.x=-10;
+	   cubeEx81.position.x=-10;
+	   cube171.position.x = -11;
+	   cube271.position.x = -11;
+	   cube371.position.x = -11;
+	   cube471.position.x = -11;
+	   cube571.position.x = -11;
+	   cube671.position.x = -11;
+	   cube771.position.x = -11;
+	   cubeWater41.position.x=-11;
+	   cubeEx121.position.x=-10;
+	   cubeEx161.position.x=-10;
+	   cubeEx201.position.x=-10;
+	   cubeEx241.position.x=-10;
+	   cubeEx281.position.x=-10;
+	   
+       cube11.position.y = 3;
+	   cubeExtra11.position.y = 1;
+	   cubeEx11.position.y = 4.75;
+	   cubeEx51.position.y=8.25;
+	   cube111.position.y = 6.5;
+	   cube211.position.y = 9.75;
+	   cube311.position.y = 13;
+	   cube411.position.y = 16.25;
+	   cube511.position.y = 19.5;
+	   cube611.position.y = 22.75;
+	   cube711.position.y = 26;
+	   cubeWater11.position.y=27.75;
+	   cubeEx91.position.y=11.5;
+	   cubeEx131.position.y=14.75;
+	   cubeEx171.position.y=18;
+	   cubeEx211.position.y=21.25;
+	   cubeEx251.position.y=24.5;
+	   cube21.position.y = 14.5;
+	   cubeDoor11.position.y=2;
+	   cube31.position.y=3;
+	   cubeExtra21.position.y=1;
+	   cubeEx21.position.y = 4.75;
+	   cubeEx61.position.y=8.25;
+	   cube131.position.y = 6.5;
+	   cube231.position.y = 9.75;
+	   cube331.position.y = 13;
+	   cube431.position.y = 16.25;
+	   cube531.position.y = 19.5;
+	   cube631.position.y = 22.75;
+	   cube731.position.y = 26;
+	   cubeWater21.position.y=27.75;
+	   cubeEx101.position.y=11.5;
+	   cubeEx141.position.y=14.75;
+	   cubeEx181.position.y=18;
+	   cubeEx221.position.y=21.25;
+	   cubeEx261.position.y=24.5;
+	   cube41.position.y = 14.5;
+	   cubeDoor21.position.y=2;
+	   cube51.position.y=3;
+	   cubeExtra31.position.y=1;
+	   cubeEx31.position.y = 4.75;
+	   cubeEx71.position.y = 8.25;
+	   cube151.position.y = 6.5;
+	   cube251.position.y = 9.75;
+	   cube351.position.y = 13;
+	   cube451.position.y = 16.25;
+	   cube551.position.y = 19.5;
+	   cube651.position.y = 22.75;
+	   cube751.position.y = 26;
+	   cubeWater31.position.y=27.75;
+	   cubeEx111.position.y=11.5;
+	   cubeEx151.position.y=14.75;
+	   cubeEx191.position.y=18;
+	   cubeEx231.position.y=21.25;
+	   cubeEx271.position.y=24.5;
+	   cube61.position.y = 14.5;
+	   cubeDoor31.position.y=2;
+	   cube71.position.y=3;
+	   cubeExtra41.position.y=1;
+	   cubeEx41.position.y = 4.75;
+	   cubeEx81.position.y = 8.25;
+	   cube171.position.y = 6.5;
+	   cube271.position.y = 9.75;
+	   cube371.position.y = 13;
+	   cube471.position.y = 16.25;
+	   cube571.position.y = 19.5;
+	   cube671.position.y = 22.75;
+	   cube771.position.y = 26;
+	   cubeWater41.position.y=27.75;
+	   cubeEx121.position.y=11.5;
+	   cubeEx161.position.y=14.75;
+	   cubeEx201.position.y=18;
+	   cubeEx241.position.y=21.25;
+	   cubeEx281.position.y=24.5;
+	   
+       cube11.position.z =-26;
+	   cubeExtra11.position.z =-26;
+	   cubeEx11.position.z =-26;
+	   cubeEx51.position.z =-26;
+	   cube111.position.z =-26;
+	   cube211.position.z =-26;
+	   cube311.position.z =-26;
+	   cube411.position.z =-26;
+	   cube511.position.z =-26;
+	   cube611.position.z =-26;
+	   cube711.position.z =-26;
+	   cubeWater11.position.z=-26;
+	   cubeEx91.position.z =-26;
+	   cubeEx131.position.z =-26;
+	   cubeEx171.position.z =-26;
+	   cubeEx211.position.z =-26;
+	   cubeEx251.position.z =-26;
+	   cube21.position.z =-26;
+	   cubeDoor11.position.z=-21.25;
+	   cube31.position.z=-26;
+	   cubeExtra21.position.z =-26;
+	   cubeEx21.position.z =-26;
+	   cubeEx61.position.z =-26;
+	   cube131.position.z =-26;
+	   cube231.position.z =-26;
+	   cube331.position.z =-26;
+	   cube431.position.z =-26;
+	   cube531.position.z =-26;
+	   cube631.position.z =-26;
+	   cube731.position.z =-26;
+	   cubeWater21.position.z=-26;
+	   cubeEx101.position.z =-26;
+	   cubeEx141.position.z =-26;
+	   cubeEx181.position.z =-26;
+	   cubeEx221.position.z =-26;
+	   cubeEx261.position.z =-26;
+	   cube41.position.z=-26;
+	   cubeDoor21.position.z=-21.25;
+	   cube51.position.z=-26;
+	   cubeExtra31.position.z =-26;
+	   cubeEx31.position.z =-26;
+	   cubeEx71.position.z =-26;
+	   cube151.position.z =-26;
+	   cube251.position.z =-26;
+	   cube351.position.z =-26;
+	   cube451.position.z =-26;
+	   cube551.position.z =-26;
+	   cube651.position.z =-26;
+	   cube751.position.z =-26;
+	   cubeWater31.position.z=-26;
+	   cubeEx111.position.z =-26;
+	   cubeEx151.position.z =-26;
+	   cubeEx191.position.z =-26;
+	   cubeEx231.position.z =-26;
+	   cubeEx271.position.z =-26;
+	   cube61.position.z=-26;
+	   cubeDoor31.position.z=-21.25;
+	   cube71.position.z=-26;
+	   cubeExtra41.position.z =-26;
+	   cubeEx41.position.z =-26;
+	   cubeEx81.position.z =-26;
+	   cube171.position.z =-26;
+	   cube271.position.z =-26;
+	   cube371.position.z =-26;
+	   cube471.position.z =-26;
+	   cube571.position.z =-26;
+	   cube671.position.z =-26;
+	   cube771.position.z =-26;
+	   cubeWater41.position.z=-26;
+	   cubeEx121.position.z =-26;
+	   cubeEx161.position.z =-26;
+	   cubeEx201.position.z =-26;
+	   cubeEx241.position.z =-26;
+	   cubeEx281.position.z =-26;
+	   
+	    
+	   scene.add(cube11);
+	   scene.add(cubeExtra11);
+	   scene.add(cubeEx11);
+	   scene.add(cubeEx51);
+	   scene.add(cube111);
+	   scene.add(cube211);
+	   scene.add(cube311);
+	   scene.add(cube411);
+	   scene.add(cube511);
+	   scene.add(cube611);
+	   scene.add(cube711);
+	   scene.add(cubeWater11);
+	   scene.add(cubeEx91);
+	   scene.add(cubeEx131);
+	   scene.add(cubeEx171);
+	   scene.add(cubeEx211);
+	   scene.add(cubeEx251);
+	   scene.add(cube21);
+	   scene.add(cubeDoor11);
+	   scene.add(cube31);
+	   scene.add(cubeExtra21);
+	   scene.add(cubeEx21);
+	   scene.add(cubeEx61);
+	   scene.add(cube131);
+	   scene.add(cube231);
+	   scene.add(cube331);
+	   scene.add(cube431);
+	   scene.add(cube531);
+	   scene.add(cube631);
+	   scene.add(cube731);
+	   scene.add(cubeWater21);
+	   scene.add(cubeEx101);
+	   scene.add(cubeEx141);
+	   scene.add(cubeEx181);
+	   scene.add(cubeEx221);
+	   scene.add(cubeEx261);
+	   scene.add(cube41);
+	   scene.add(cubeDoor21);
+	   scene.add(cube51);
+	   scene.add(cubeExtra31);
+	   scene.add(cubeEx31);
+	   scene.add(cubeEx71);
+	   scene.add(cube151);
+	   scene.add(cube251);
+	   scene.add(cube351);
+	   scene.add(cube451);
+	   scene.add(cube551);
+	   scene.add(cube651);
+	   scene.add(cube751);
+	   scene.add(cubeWater31);
+	   scene.add(cubeEx111);
+	   scene.add(cubeEx151);
+	   scene.add(cubeEx191);
+	   scene.add(cubeEx231);
+	   scene.add(cubeEx271);
+	   scene.add(cube61);
+	   scene.add(cubeDoor31);
+	   scene.add(cube71);
+	   scene.add(cubeExtra41);
+	   scene.add(cubeEx41);
+	   scene.add(cubeEx81);
+	   scene.add(cube171);
+	   scene.add(cube271);
+	   scene.add(cube371);
+	   scene.add(cube471);
+	   scene.add(cube571);
+	   scene.add(cube671);
+	   scene.add(cube771);
+	   scene.add(cubeWater41);
+	   scene.add(cubeEx121);
+	   scene.add(cubeEx161);
+	   scene.add(cubeEx201);
+	   scene.add(cubeEx241);
+	   scene.add(cubeEx281);
+	   
+	   
+	   //楼房3属性设置 
+	   var cubeExtra12=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra22=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra32=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra42=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   
+	   var cubeEx12=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx22=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx32=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx42=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx52=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx62=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx72=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx82=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx92=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx102=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx112=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx122=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx132=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx142=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx152=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx162=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx172=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx182=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx192=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx202=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx212=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx222=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx232=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx242=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx252=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx262=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx272=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx282=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   
+	   var cube12 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube112 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube212 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube312 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube412 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube512 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube612 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube712 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube22=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+	   var cube32=new THREE.Mesh(cubeGeometry3,faceMaterial1);
+	   var cube132 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube232 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube332 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube432 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube532 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube632 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube732 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube42=new THREE.Mesh(cubeGeometry4,faceMaterial2);
+	   var cube52=new THREE.Mesh(cubeGeometry5,faceMaterial1);
+	   var cube152 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube252 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube352 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube452 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube552 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube652 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube752 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube62=new THREE.Mesh(cubeGeometry6,faceMaterial2);
+	   var cube72=new THREE.Mesh(cubeGeometry7,faceMaterial1);
+	   var cube172 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube272 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube372 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube472 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube572 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube672 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube772 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   
+	   var cubeWater12=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater22=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater32=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater42=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   
+	   var cubeDoor12=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor22=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor32=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   
+	   cube12.position.x = -29;
+	   cubeExtra12.position.x=-29;
+	   cubeEx12.position.x=-30;
+	   cubeEx52.position.x=-30;
+	   cube112.position.x = -29;
+	   cube212.position.x = -29;
+	   cube312.position.x = -29;
+	   cube412.position.x = -29;
+	   cube512.position.x = -29;
+	   cube612.position.x = -29;
+	   cube712.position.x = -29;
+	   cubeWater12.position.x=-29;
+	   cubeEx92.position.x=-30;
+	   cubeEx132.position.x=-30;
+	   cubeEx172.position.x=-30;
+	   cubeEx212.position.x=-30;
+	   cubeEx252.position.x=-30;
+	   cube22.position.x=-26;
+	   cubeDoor12.position.x=-26;
+	   cube32.position.x=-24;
+	   cubeExtra22.position.x=-24;
+	   cubeEx22.position.x=-24;
+	   cubeEx62.position.x=-24;
+	   cube132.position.x = -24;
+	   cube232.position.x = -24;
+	   cube332.position.x = -24;
+	   cube432.position.x = -24;
+	   cube532.position.x = -24;
+	   cube632.position.x = -24;
+	   cube732.position.x = -24;
+	   cubeWater22.position.x=-24;
+	   cubeEx102.position.x=-24;
+	   cubeEx142.position.x=-24;
+	   cubeEx182.position.x=-24;
+	   cubeEx222.position.x=-24;
+	   cubeEx262.position.x=-24;
+	   cube42.position.x=-20;
+	   cubeDoor22.position.x=-20;
+	   cube52.position.x=-17;
+	   cubeExtra32.position.x=-17;
+	   cubeEx32.position.x=-17;
+	   cubeEx72.position.x=-17;
+	   cube152.position.x = -17;
+	   cube252.position.x = -17;
+	   cube352.position.x = -17;
+	   cube452.position.x = -17;
+	   cube552.position.x = -17;
+	   cube652.position.x = -17;
+	   cube752.position.x = -17;
+	   cubeWater32.position.x=-17;
+	   cubeEx112.position.x=-17;
+	   cubeEx152.position.x=-17;
+	   cubeEx192.position.x=-17;
+	   cubeEx232.position.x=-17;
+	   cubeEx272.position.x=-17;
+	   cube62.position.x=-14;
+	   cubeDoor32.position.x=-14;
+	   cube72.position.x=-11;
+	   cubeExtra42.position.x=-11;
+	   cubeEx42.position.x=-10;
+	   cubeEx82.position.x=-10;
+	   cube172.position.x = -11;
+	   cube272.position.x = -11;
+	   cube372.position.x = -11;
+	   cube472.position.x = -11;
+	   cube572.position.x = -11;
+	   cube672.position.x = -11;
+	   cube772.position.x = -11;
+	   cubeWater42.position.x=-11;
+	   cubeEx122.position.x=-10;
+	   cubeEx162.position.x=-10;
+	   cubeEx202.position.x=-10;
+	   cubeEx242.position.x=-10;
+	   cubeEx282.position.x=-10;
+	   
+       cube12.position.y = 3;
+	   cubeExtra12.position.y = 1;
+	   cubeEx12.position.y = 4.75;
+	   cubeEx52.position.y=8.25;
+	   cube112.position.y = 6.5;
+	   cube212.position.y = 9.75;
+	   cube312.position.y = 13;
+	   cube412.position.y = 16.25;
+	   cube512.position.y = 19.5;
+	   cube612.position.y = 22.75;
+	   cube712.position.y = 26;
+	   cubeWater12.position.y=27.75;
+	   cubeEx92.position.y=11.5;
+	   cubeEx132.position.y=14.75;
+	   cubeEx172.position.y=18;
+	   cubeEx212.position.y=21.25;
+	   cubeEx252.position.y=24.5;
+	   cube22.position.y = 14.5;
+	   cubeDoor12.position.y=2;
+	   cube32.position.y=3;
+	   cubeExtra22.position.y=1;
+	   cubeEx22.position.y = 4.75;
+	   cubeEx62.position.y=8.25;
+	   cube132.position.y = 6.5;
+	   cube232.position.y = 9.75;
+	   cube332.position.y = 13;
+	   cube432.position.y = 16.25;
+	   cube532.position.y = 19.5;
+	   cube632.position.y = 22.75;
+	   cube732.position.y = 26;
+	   cubeWater22.position.y=27.75;
+	   cubeEx102.position.y=11.5;
+	   cubeEx142.position.y=14.75;
+	   cubeEx182.position.y=18;
+	   cubeEx222.position.y=21.25;
+	   cubeEx262.position.y=24.5;
+	   cube42.position.y = 14.5;
+	   cubeDoor22.position.y=2;
+	   cube52.position.y=3;
+	   cubeExtra32.position.y=1;
+	   cubeEx32.position.y = 4.75;
+	   cubeEx72.position.y = 8.25;
+	   cube152.position.y = 6.5;
+	   cube252.position.y = 9.75;
+	   cube352.position.y = 13;
+	   cube452.position.y = 16.25;
+	   cube552.position.y = 19.5;
+	   cube652.position.y = 22.75;
+	   cube752.position.y = 26;
+	   cubeWater32.position.y=27.75;
+	   cubeEx112.position.y=11.5;
+	   cubeEx152.position.y=14.75;
+	   cubeEx192.position.y=18;
+	   cubeEx232.position.y=21.25;
+	   cubeEx272.position.y=24.5;
+	   cube62.position.y = 14.5;
+	   cubeDoor32.position.y=2;
+	   cube72.position.y=3;
+	   cubeExtra42.position.y=1;
+	   cubeEx42.position.y = 4.75;
+	   cubeEx82.position.y = 8.25;
+	   cube172.position.y = 6.5;
+	   cube272.position.y = 9.75;
+	   cube372.position.y = 13;
+	   cube472.position.y = 16.25;
+	   cube572.position.y = 19.5;
+	   cube672.position.y = 22.75;
+	   cube772.position.y = 26;
+	   cubeWater42.position.y=27.75;
+	   cubeEx122.position.y=11.5;
+	   cubeEx162.position.y=14.75;
+	   cubeEx202.position.y=18;
+	   cubeEx242.position.y=21.25;
+	   cubeEx282.position.y=24.5;
+	   
+       cube12.position.z =29;
+	   cubeExtra12.position.z =29;
+	   cubeEx12.position.z =29;
+	   cubeEx52.position.z =29;
+	   cube112.position.z =29;
+	   cube212.position.z =29;
+	   cube312.position.z =29;
+	   cube412.position.z =29;
+	   cube512.position.z =29;
+	   cube612.position.z =29;
+	   cube712.position.z =29;
+	   cubeWater12.position.z=29;
+	   cubeEx92.position.z =29;
+	   cubeEx132.position.z =29;
+	   cubeEx172.position.z =29;
+	   cubeEx212.position.z =29;
+	   cubeEx252.position.z =29;
+	   cube22.position.z =29;
+	   cubeDoor12.position.z=33.75;
+	   cube32.position.z=29;
+	   cubeExtra22.position.z =29;
+	   cubeEx22.position.z =29;
+	   cubeEx62.position.z =29;
+	   cube132.position.z =29;
+	   cube232.position.z =29;
+	   cube332.position.z =29;
+	   cube432.position.z =29;
+	   cube532.position.z =29;
+	   cube632.position.z =29;
+	   cube732.position.z =29;
+	   cubeWater22.position.z=29;
+	   cubeEx102.position.z =29;
+	   cubeEx142.position.z =29;
+	   cubeEx182.position.z =29;
+	   cubeEx222.position.z =29;
+	   cubeEx262.position.z =29;
+	   cube42.position.z=29;
+	   cubeDoor22.position.z=33.75;
+	   cube52.position.z=29;
+	   cubeExtra32.position.z =29;
+	   cubeEx32.position.z =29;
+	   cubeEx72.position.z =29;
+	   cube152.position.z =29;
+	   cube252.position.z =29;
+	   cube352.position.z =29;
+	   cube452.position.z =29;
+	   cube552.position.z =29;
+	   cube652.position.z =29;
+	   cube752.position.z =29;
+	   cubeWater32.position.z=29;
+	   cubeEx112.position.z =29;
+	   cubeEx152.position.z =29;
+	   cubeEx192.position.z =29;
+	   cubeEx232.position.z =29;
+	   cubeEx272.position.z =29;
+	   cube62.position.z=29;
+	   cubeDoor32.position.z=33.75;
+	   cube72.position.z=29;
+	   cubeExtra42.position.z =29;
+	   cubeEx42.position.z =29;
+	   cubeEx82.position.z =29;
+	   cube172.position.z =29;
+	   cube272.position.z =29;
+	   cube372.position.z =29;
+	   cube472.position.z =29;
+	   cube572.position.z =29;
+	   cube672.position.z =29;
+	   cube772.position.z =29;
+	   cubeWater42.position.z=29;
+	   cubeEx122.position.z =29;
+	   cubeEx162.position.z =29;
+	   cubeEx202.position.z =29;
+	   cubeEx242.position.z =29;
+	   cubeEx282.position.z =29;
+	   
+	    
+	   scene.add(cube12);
+	   scene.add(cubeExtra12);
+	   scene.add(cubeEx12);
+	   scene.add(cubeEx52);
+	   scene.add(cube112);
+	   scene.add(cube212);
+	   scene.add(cube312);
+	   scene.add(cube412);
+	   scene.add(cube512);
+	   scene.add(cube612);
+	   scene.add(cube712);
+	   scene.add(cubeWater12);
+	   scene.add(cubeEx92);
+	   scene.add(cubeEx132);
+	   scene.add(cubeEx172);
+	   scene.add(cubeEx212);
+	   scene.add(cubeEx252);
+	   scene.add(cube22);
+	   scene.add(cubeDoor12);
+	   scene.add(cube32);
+	   scene.add(cubeExtra22);
+	   scene.add(cubeEx22);
+	   scene.add(cubeEx62);
+	   scene.add(cube132);
+	   scene.add(cube232);
+	   scene.add(cube332);
+	   scene.add(cube432);
+	   scene.add(cube532);
+	   scene.add(cube632);
+	   scene.add(cube732);
+	   scene.add(cubeWater22);
+	   scene.add(cubeEx102);
+	   scene.add(cubeEx142);
+	   scene.add(cubeEx182);
+	   scene.add(cubeEx222);
+	   scene.add(cubeEx262);
+	   scene.add(cube42);
+	   scene.add(cubeDoor22);
+	   scene.add(cube52);
+	   scene.add(cubeExtra32);
+	   scene.add(cubeEx32);
+	   scene.add(cubeEx72);
+	   scene.add(cube152);
+	   scene.add(cube252);
+	   scene.add(cube352);
+	   scene.add(cube452);
+	   scene.add(cube552);
+	   scene.add(cube652);
+	   scene.add(cube752);
+	   scene.add(cubeWater32);
+	   scene.add(cubeEx112);
+	   scene.add(cubeEx152);
+	   scene.add(cubeEx192);
+	   scene.add(cubeEx232);
+	   scene.add(cubeEx272);
+	   scene.add(cube62);
+	   scene.add(cubeDoor32);
+	   scene.add(cube72);
+	   scene.add(cubeExtra42);
+	   scene.add(cubeEx42);
+	   scene.add(cubeEx82);
+	   scene.add(cube172);
+	   scene.add(cube272);
+	   scene.add(cube372);
+	   scene.add(cube472);
+	   scene.add(cube572);
+	   scene.add(cube672);
+	   scene.add(cube772);
+	   scene.add(cubeWater42);
+	   scene.add(cubeEx122); 
+	   scene.add(cubeEx162); 
+	   scene.add(cubeEx202);
+	   scene.add(cubeEx242);
+	   scene.add(cubeEx282);
+	   
+	   //楼房4属性设置
+	   var cubeExtra13=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra23=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra33=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   var cubeExtra43=new THREE.Mesh(cubeGeometryExtra,faceMaterialExtra);
+	   
+	   var cubeEx13=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx23=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx33=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx43=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx53=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx63=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx73=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx83=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx93=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx103=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx113=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx123=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx133=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx143=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx153=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx163=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx173=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx183=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx193=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx203=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx213=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx223=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx233=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx243=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx253=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx263=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx273=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   var cubeEx283=new THREE.Mesh(cubeGeometryEx,faceMaterialExtra);
+	   
+	   var cube13 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube113 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube213 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube313 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube413 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube513 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube613 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube713 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube23=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+	   var cube33=new THREE.Mesh(cubeGeometry3,faceMaterial1);
+	   var cube133 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube233 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube333 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube433 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube533 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube633 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube733 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube43=new THREE.Mesh(cubeGeometry4,faceMaterial2);
+	   var cube53=new THREE.Mesh(cubeGeometry5,faceMaterial1);
+	   var cube153 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube253 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube353 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube453 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube553 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube653 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube753 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube63=new THREE.Mesh(cubeGeometry6,faceMaterial2);
+	   var cube73=new THREE.Mesh(cubeGeometry7,faceMaterial1);
+	   var cube173 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube273 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube373 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube473 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube573 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube673 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   var cube773 = new THREE.Mesh( cubeGeometry1, faceMaterial1 );
+	   
+	   var cubeWater13=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater23=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater33=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   var cubeWater43=new THREE.Mesh(cubeGeometryWater,faceMaterialWater);
+	   
+	   var cubeDoor13=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor23=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   var cubeDoor33=new THREE.Mesh(cubeGeometryDoor,faceMaterialDoor);
+	   
+	   var cubeElec1=new THREE.Mesh(cubeGeometryElec,faceMaterialElec);
+	   
+	   var cubeGlass1=new THREE.Mesh(cubeGeometryGlass,faceMaterialGlass);
+	   
+	   cube13.position.x = 8;
+	   cubeExtra13.position.x=8;
+	   cubeEx13.position.x=7;
+	   cubeEx53.position.x=7;
+	   cube113.position.x = 8;
+	   cube213.position.x = 8;
+	   cube313.position.x = 8;
+	   cube413.position.x = 8;
+	   cube513.position.x = 8;
+	   cube613.position.x = 8;
+	   cube713.position.x = 8;
+	   cubeWater13.position.x=8;
+	   cubeEx93.position.x=7;
+	   cubeEx133.position.x=7;
+	   cubeEx173.position.x=7;
+	   cubeEx213.position.x=7;
+	   cubeEx253.position.x=7;
+	   cube23.position.x=11;
+	   cubeDoor13.position.x=11;
+	   cube33.position.x=13;
+	   cubeExtra23.position.x=13;
+	   cubeEx23.position.x=13;
+	   cubeEx63.position.x=13;
+	   cube133.position.x = 13;
+	   cube233.position.x = 13;
+	   cube333.position.x = 13;
+	   cube433.position.x = 13;
+	   cube533.position.x = 13;
+	   cube633.position.x = 13;
+	   cube733.position.x = 13;
+	   cubeWater23.position.x=13;
+	   cubeEx103.position.x=13;
+	   cubeEx143.position.x=13;
+	   cubeEx183.position.x=13;
+	   cubeEx223.position.x=13;
+	   cubeEx263.position.x=13;
+	   cube43.position.x=17;
+	   cubeDoor23.position.x=17;
+	   cube53.position.x=20;
+	   cubeExtra33.position.x=20;
+	   cubeEx33.position.x=20;
+	   cubeEx73.position.x=20;
+	   cube153.position.x = 20;
+	   cube253.position.x = 20;
+	   cube353.position.x = 20;
+	   cube453.position.x = 20;
+	   cube553.position.x = 20;
+	   cube653.position.x = 20;
+	   cube753.position.x = 20;
+	   cubeWater33.position.x=20;
+	   cubeEx113.position.x=20;
+	   cubeEx153.position.x=20;
+	   cubeEx193.position.x=20;
+	   cubeEx233.position.x=20;
+	   cubeEx273.position.x=20;
+	   cube63.position.x=23;
+	   cubeDoor33.position.x=23;
+	   cube73.position.x=26;
+	   cubeExtra43.position.x=26;
+	   cubeEx43.position.x=27;
+	   cubeEx83.position.x=27;
+	   cube173.position.x = 26;
+	   cube273.position.x = 26;
+	   cube373.position.x = 26;
+	   cube473.position.x = 26;
+	   cube573.position.x = 26;
+	   cube673.position.x = 26;
+	   cube773.position.x = 26;
+	   cubeWater43.position.x=26;
+	   cubeEx123.position.x=27;
+	   cubeEx163.position.x=27;
+	   cubeEx203.position.x=27;
+	   cubeEx243.position.x=27;
+	   cubeEx283.position.x=27;
+	   cubeElec1.position.x=30;
+	   cubeGlass1.position.x=20;
+	   
+       cube13.position.y = 3;
+	   cubeExtra13.position.y = 1;
+	   cubeEx13.position.y = 4.75;
+	   cubeEx53.position.y=8.25;
+	   cube113.position.y = 6.5;
+	   cube213.position.y = 9.75;
+	   cube313.position.y = 13;
+	   cube413.position.y = 16.25;
+	   cube513.position.y = 19.5;
+	   cube613.position.y = 22.75;
+	   cube713.position.y = 26;
+	   cubeWater13.position.y=27.75;
+	   cubeEx93.position.y=11.5;
+	   cubeEx133.position.y=14.75;
+	   cubeEx173.position.y=18;
+	   cubeEx213.position.y=21.25;
+	   cubeEx253.position.y=24.5;
+	   cube23.position.y = 14.5;
+	   cubeDoor13.position.y=2;
+	   cube33.position.y=3;
+	   cubeExtra23.position.y=1;
+	   cubeEx23.position.y = 4.75;
+	   cubeEx63.position.y=8.25;
+	   cube133.position.y = 6.5;
+	   cube233.position.y = 9.75;
+	   cube333.position.y = 13;
+	   cube433.position.y = 16.25;
+	   cube533.position.y = 19.5;
+	   cube633.position.y = 22.75;
+	   cube733.position.y = 26;
+	   cubeWater23.position.y=27.75;
+	   cubeEx103.position.y=11.5;
+	   cubeEx143.position.y=14.75;
+	   cubeEx183.position.y=18;
+	   cubeEx223.position.y=21.25;
+	   cubeEx263.position.y=24.5;
+	   cube43.position.y = 14.5;
+	   cubeDoor23.position.y=2;
+	   cube53.position.y=3;
+	   cubeExtra33.position.y=1;
+	   cubeEx33.position.y = 4.75;
+	   cubeEx73.position.y = 8.25;
+	   cube153.position.y = 6.5;
+	   cube253.position.y = 9.75;
+	   cube353.position.y = 13;
+	   cube453.position.y = 16.25;
+	   cube553.position.y = 19.5;
+	   cube653.position.y = 22.75;
+	   cube753.position.y = 26;
+	   cubeWater33.position.y=27.75;
+	   cubeEx113.position.y=11.5;
+	   cubeEx153.position.y=14.75;
+	   cubeEx193.position.y=18;
+	   cubeEx233.position.y=21.25;
+	   cubeEx273.position.y=24.5;
+	   cube63.position.y = 14.5;
+	   cubeDoor33.position.y=2;
+	   cube73.position.y=3;
+	   cubeExtra43.position.y=1;
+	   cubeEx43.position.y = 4.75;
+	   cubeEx83.position.y = 8.25;
+	   cube173.position.y = 6.5;
+	   cube273.position.y = 9.75;
+	   cube373.position.y = 13;
+	   cube473.position.y = 16.25;
+	   cube573.position.y = 19.5;
+	   cube673.position.y = 22.75;
+	   cube773.position.y = 26;
+	   cubeWater43.position.y=27.75;
+	   cubeEx123.position.y=11.5;
+	   cubeEx163.position.y=14.75;
+	   cubeEx203.position.y=18;
+	   cubeEx243.position.y=21.25;
+	   cubeEx283.position.y=24.5;
+	   cubeElec1.position.y=3;
+	   cubeGlass1.position.y=0.4;
+	   
+       cube13.position.z =1;
+	   cubeExtra13.position.z =1;
+	   cubeEx13.position.z =1;
+	   cubeEx53.position.z =1;
+	   cubeEx93.position.z =1;
+	   cubeEx133.position.z =1;
+	   cubeEx173.position.z =1;
+	   cubeEx213.position.z =1;
+	   cubeEx253.position.z =1;
+	   cube113.position.z =1;
+	   cube213.position.z =1;
+	   cube313.position.z =1;
+	   cube413.position.z =1;
+	   cube513.position.z =1;
+	   cube613.position.z =1;
+	   cube713.position.z =1;
+	   cubeWater13.position.z=1;   
+	   cube23.position.z =1;
+	   cubeDoor13.position.z =5.7;
+	   cube33.position.z=1;
+	   cubeExtra23.position.z =1;
+	   cubeEx23.position.z =1;
+	   cubeEx63.position.z =1;
+	   cubeEx103.position.z =1;
+	   cubeEx143.position.z =1;
+	   cubeEx183.position.z =1;
+	   cubeEx223.position.z =1;
+	   cubeEx263.position.z =1;
+	   cube133.position.z =1;
+	   cube233.position.z =1;
+	   cube333.position.z =1;
+	   cube433.position.z =1;
+	   cube533.position.z =1;
+	   cube633.position.z =1;
+	   cube733.position.z =1;
+	   cubeWater23.position.z=1;   
+	   cube43.position.z=1;
+	   cubeDoor23.position.z =5.7;
+	   cube53.position.z=1;
+	   cubeExtra33.position.z =1;
+	   cubeEx33.position.z =1;
+	   cubeEx73.position.z =1;
+	   cubeEx113.position.z =1;
+	   cubeEx153.position.z =1;
+	   cubeEx193.position.z =1;
+	   cubeEx233.position.z =1;
+	   cubeEx273.position.z =1;
+	   cube153.position.z =1;
+	   cube253.position.z =1;
+	   cube353.position.z =1;
+	   cube453.position.z =1;
+	   cube553.position.z =1;
+	   cube653.position.z =1;
+	   cube753.position.z =1;
+	   cubeWater33.position.z=1; 
+	   cube63.position.z=1;
+	   cubeDoor33.position.z =5.7;
+	   cube73.position.z=1;
+	   cubeExtra43.position.z =1;
+	   cubeEx43.position.z =1;
+	   cubeEx83.position.z =1;
+	   cubeEx123.position.z =1;
+	   cubeEx163.position.z =1;
+	   cubeEx203.position.z =1;
+	   cubeEx243.position.z =1;
+	   cubeEx283.position.z =1;
+	   cube173.position.z =1;
+	   cube273.position.z =1;
+	   cube373.position.z =1;
+	   cube473.position.z =1;
+	   cube573.position.z =1;
+	   cube673.position.z =1;
+	   cube773.position.z =1;
+	   cubeWater43.position.z=1;  
+	   cubeElec1.position.z=-25; 
+	   cubeGlass1.position.z=-12;
+	   
+	    
+	   scene.add(cube13);
+	   scene.add(cubeExtra13);
+	   scene.add(cubeEx13);
+	   scene.add(cubeEx53);
+	   scene.add(cube113);
+	   scene.add(cube213);
+	   scene.add(cube313);
+	   scene.add(cube413);
+	   scene.add(cube513);
+	   scene.add(cube613);
+	   scene.add(cube713);
+	   scene.add(cubeWater13);
+	   scene.add(cubeEx93);
+	   scene.add(cubeEx133);
+	   scene.add(cubeEx173);
+	   scene.add(cubeEx213);
+	   scene.add(cubeEx253);
+	   scene.add(cube23);
+	   scene.add(cubeDoor13);
+	   scene.add(cube33);
+	   scene.add(cubeExtra23);
+	   scene.add(cubeEx23);
+	   scene.add(cubeEx63);
+	   scene.add(cube133);
+	   scene.add(cube233);
+	   scene.add(cube333);
+	   scene.add(cube433);
+	   scene.add(cube533);
+	   scene.add(cube633);
+	   scene.add(cube733);
+	   scene.add(cubeWater23);
+	   scene.add(cubeEx103);
+	   scene.add(cubeEx143);
+	   scene.add(cubeEx183);
+	   scene.add(cubeEx223);
+	   scene.add(cubeEx263);
+	   scene.add(cube43);
+	   scene.add(cubeDoor23);
+	   scene.add(cube53);
+	   scene.add(cubeExtra33);
+	   scene.add(cubeEx33);
+	   scene.add(cubeEx73);
+	   scene.add(cube153);
+	   scene.add(cube253);
+	   scene.add(cube353);
+	   scene.add(cube453);
+	   scene.add(cube553);
+	   scene.add(cube653);
+	   scene.add(cube753);
+	   scene.add(cubeWater33);
+	   scene.add(cubeEx113);
+	   scene.add(cubeEx153);
+	   scene.add(cubeEx193);
+	   scene.add(cubeEx233);
+	   scene.add(cubeEx273);
+	   scene.add(cube63);
+	   scene.add(cubeDoor33);
+	   scene.add(cube73);
+	   scene.add(cubeExtra43);
+	   scene.add(cubeEx43);
+	   scene.add(cubeEx83);
+	   scene.add(cube173);
+	   scene.add(cube273);
+	   scene.add(cube373);
+	   scene.add(cube473);
+	   scene.add(cube573);
+	   scene.add(cube673);
+	   scene.add(cube773);
+	   scene.add(cubeWater43);
+	   scene.add(cubeEx123); 
+	   scene.add(cubeEx163); 
+	   scene.add(cubeEx203);
+	   scene.add(cubeEx243);
+	   scene.add(cubeEx283);
+	   scene.add(cubeElec1);
+	   scene.add(cubeGlass1);
+	   
+	   //超市的设计
+	   var cubeGeometry1 = new THREE.BoxGeometry(10, 12, 30);
+	   var cubeGeometry2 = new THREE.BoxGeometry(0.5, 3, 20);
+	   var cubeGeometry3 = new THREE.BoxGeometry(0.2, 6, 3);
+	   var cubeGeometry4 = new THREE.BoxGeometry(3, 6, 0.2);
+	   var cubeGeometry5 = new THREE.BoxGeometry(4, 4, 0.2);
+	   var matArrayAll= [];
+	   var matArrayFlag=[];
+	   var matArrayFlag2=[];
+	   var matArrayGlass1=[];
+	   var matArrayGlass2=[];
+	   
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayAll.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/supermarket.png')
+	   }));
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   matArrayFlag.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/floor.jpg')
+	   }));
+	   
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayFlag2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/supermarket.png')
+	   }));
+	   
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/glassdoor1.png')
+	   }));
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass1.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('shui')
+	   }));
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/glassdoor2.png')
+	   }));
+	   matArrayGlass2.push(new THREE.MeshBasicMaterial({
+		   map:new THREE.ImageUtils.loadTexture('Images/glassdoor1.png')
+	   }));
+	   
+	   var faceMaterial1 = new THREE.MeshFaceMaterial(matArrayAll);
+	   var faceMaterial2 = new THREE.MeshFaceMaterial(matArrayFlag);
+	   var faceMaterial3 = new THREE.MeshFaceMaterial(matArrayGlass1);
+	   var faceMaterial4 = new THREE.MeshFaceMaterial(matArrayGlass2);
+	   var faceMaterial5 = new THREE.MeshFaceMaterial(matArrayFlag2);
+	   
+	   var cubeAll=new THREE.Mesh(cubeGeometry1,faceMaterial1);
+	   var cubeFlag=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+	   var cubeGlass1=new THREE.Mesh(cubeGeometry3,faceMaterial3);
+	   var cubeGlass2=new THREE.Mesh(cubeGeometry4,faceMaterial4);
+	   var cubeFlag2=new THREE.Mesh(cubeGeometry5,faceMaterial5);
+	   
+	   cubeAll.position.x=35;
+	   cubeFlag.position.x=30;
+	   cubeGlass1.position.x=30;
+	   cubeGlass2.position.x=29;
+	   cubeAll.position.y=6;
+	   cubeFlag.position.y=9.5;
+	   cubeGlass1.position.y=3;
+	   cubeGlass2.position.y=3;
+	   cubeAll.position.z=28;
+	   cubeFlag.position.z=28;
+	   cubeGlass1.position.z=26;
+	   cubeGlass2.position.z=32;
+	   
+	   scene.add(cubeAll);
+	   scene.add(cubeFlag);
+	   scene.add(cubeGlass1);
+	   scene.add(cubeGlass2);
+	   
+	   
+	   // // 墙面
+            var cubeGeometry = new THREE.BoxGeometry(0.2, 3, 96);
+            // 创建墙面材料
+            //var cubeMaterial = new THREE.MeshBasicMaterial({ color: '#8B0A50', wireframe: false});
+            var cubeMaterial = new THREE.MeshBasicMaterial({ color: '#8B0A50', wireframe: false});
+
+            /************各个面设置不同的纹理*********/
+            var matArray = [];
+            //matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0xafc0ca}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0xd6e4ec}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            var faceMaterial = new THREE.MeshFaceMaterial(matArray);
+
+            var matArray = [];
+            matArray.push(new THREE.MeshBasicMaterial({color: 0xafc0ca}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0xd6e4ec}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+            matArray.push(new THREE.MeshBasicMaterial({color: 0x9cb2d1}));
+           var faceMaterial1 = new THREE.MeshFaceMaterial(matArray);
+
+            // 合成立方体
+            //var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+            var cube = new THREE.Mesh( cubeGeometry, faceMaterial1 );
+            // 设置墙面位置
+            cube.position.x = -45;
+            cube.position.y = 1.5;
+            cube.position.z = 0;
+            // 在场景中添加墙面
+            scene.add(cube);
+
+            // 墙面1
+            var cubeGeometry = new THREE.BoxGeometry(0.2, 3, 90);
+            // 合成立方体
+            var cube = new THREE.Mesh( cubeGeometry, faceMaterial1 );
+            // 设置墙面位置
+            cube.position.x = 0;          cube.position.y = 1.5;
+            cube.position.z = -48;
+            cube.rotation.y += 0.5*Math.PI;
+            // 在场景中添加墙面
+            scene.add(cube);
+
+        // 墙面2
+           var cubeGeometry = new THREE.BoxGeometry(0.2, 3, 96);
+           // 合成立方体
+           var cube = new THREE.Mesh( cubeGeometry, faceMaterial );
+         // 设置墙面位置
+           cube.position.x = 45;
+           cube.position.y = 1.5;
+            cube.position.z = 0;
+            // 在场景中添加墙面
+           scene.add(cube);
+
+            // 墙面3
+            var cubeGeometry = new THREE.BoxGeometry(0.2, 3, 90);
+            // 合成立方体
+            //var cube = new THREE.Mesh( cubeGeometry, faceMaterial );
+
+            var cube = new THREE.Mesh( cubeGeometry );            // 设置墙面位置
+            cube.position.x = 0;
+            cube.position.y = 1.5;
+            cube.position.z = 48;
+            cube.rotation.y += 0.5*Math.PI;
+            // 在场景中添加墙面
+           // scene.add(cube);
+
+            // 门
+            var door = new THREE.BoxGeometry(0.2, 3, 50);
+            // 创建门材料
+            //var doorMaterial = new THREE.MeshBasicMaterial({ color: '#FFFF00', wireframe: true,transparent:true,opacity:0.6});
+            //var door_cube = new THREE.Mesh( door, faceMaterial);
+            var door_cube = new THREE.Mesh(door);
+            // 设置门位置
+            door_cube.position.x = 0;
+            door_cube.position.y = 1.5;
+            door_cube.position.z = 48;
+            door_cube.rotation.y += 0.5*Math.PI;
+            //scene.add(cube);
+
+            var sphere1BSP = new ThreeBSP(cube);
+            var cube2BSP = new ThreeBSP(door_cube);
+
+            resultBSP = sphere1BSP.subtract(cube2BSP);
+            result = resultBSP.toMesh();
+            result.material.shading = THREE.FlatShading;
+            result.geometry.computeFaceNormals();
+            result.geometry.computeVertexNormals();
+            result.material.needsUpdate = true;
+            result.geometry.buffersNeedUpdate = true;
+            result.geometry.uvsNeedUpdate = true;
+            scene.add(result);
+			
+			//回廊设计
+			var cubeGeometryGlass=new THREE.BoxGeometry(10,0.8,10);
+			var cubeGeometryBase=new THREE.BoxGeometry(3,1.3,3);
+			var cubeGeometryColumn=new THREE.BoxGeometry(2,5,2);
+			var cubeGeometryCorridor =new THREE.BoxGeometry(1.8,0.6,10);
+			var cubeGeometryCorridor2 =new THREE.BoxGeometry(10,0.6,1.8);
+			var cubeGeometryTop1=new THREE.BoxGeometry(15,1.4,15);
+			var cubeGeometryTop2=new THREE.BoxGeometry(13,1.4,13);
+			var cubeGeometryTop3=new THREE.BoxGeometry(11,1.4,11);
+			var cubeGeometryTop4=new THREE.BoxGeometry(9,1.4,9);
+			var cubeGeometryTop5=new THREE.BoxGeometry(5,1.4,5);
+			
+			var matArrayGlass=[];
+			var matArrayBase=[];
+			
+			matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+			
+			matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass.png')
+	        }));
+	        matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayGlass.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+			
+			var faceMaterial1 = new THREE.MeshFaceMaterial(matArrayGlass);
+			var faceMaterial2 = new THREE.MeshFaceMaterial(matArrayBase);
+			
+			var cubeGlass=new THREE.Mesh(cubeGeometryGlass,faceMaterial1);
+			var cubeBase1=new THREE.Mesh(cubeGeometryBase,faceMaterial2);
+			var cubeBase2=new THREE.Mesh(cubeGeometryBase,faceMaterial2);
+			var cubeBase3=new THREE.Mesh(cubeGeometryBase,faceMaterial2);
+			var cubeBase4=new THREE.Mesh(cubeGeometryBase,faceMaterial2);
+			var cubeColumn1=new THREE.Mesh(cubeGeometryColumn,faceMaterial2);
+			var cubeColumn2=new THREE.Mesh(cubeGeometryColumn,faceMaterial2);
+			var cubeColumn3=new THREE.Mesh(cubeGeometryColumn,faceMaterial2);
+			var cubeColumn4=new THREE.Mesh(cubeGeometryColumn,faceMaterial2);
+			var cubeCorridor1=new THREE.Mesh(cubeGeometryCorridor,faceMaterial2);
+			var cubeCorridor2=new THREE.Mesh(cubeGeometryCorridor2,faceMaterial2);
+			var cubeCorridor3=new THREE.Mesh(cubeGeometryCorridor,faceMaterial2);
+			var cubeCorridor4=new THREE.Mesh(cubeGeometryCorridor2,faceMaterial2);
+			var cubeTop1=new THREE.Mesh(cubeGeometryTop1,faceMaterial2);
+			var cubeTop2=new THREE.Mesh(cubeGeometryTop2,faceMaterial2);
+			var cubeTop3=new THREE.Mesh(cubeGeometryTop3,faceMaterial2);
+			var cubeTop4=new THREE.Mesh(cubeGeometryTop4,faceMaterial2);
+			var cubeTop5=new THREE.Mesh(cubeGeometryTop5,faceMaterial2);
+			
+			cubeGlass.position.x=14;
+			cubeBase1.position.x=8;
+			cubeBase2.position.x=8;
+			cubeBase3.position.x=20;
+			cubeBase4.position.x=20;
+			cubeColumn1.position.x=8;
+			cubeColumn2.position.x=20;
+			cubeColumn3.position.x=8;
+			cubeColumn4.position.x=20;
+			cubeCorridor1.position.x=8;
+			cubeCorridor2.position.x=14;
+			cubeCorridor3.position.x=20;
+			cubeCorridor4.position.x=14;
+			cubeTop1.position.x=14;
+			cubeTop2.position.x=14;
+			cubeTop3.position.x=14;
+			cubeTop4.position.x=14;
+			cubeTop5.position.x=14;
+			
+			cubeGlass.position.y=0.4;
+			cubeBase1.position.y=0.65;
+			cubeBase2.position.y=0.65;
+			cubeBase3.position.y=0.65;
+			cubeBase4.position.y=0.65;
+			cubeColumn1.position.y=3.95;
+			cubeColumn2.position.y=3.95;
+			cubeColumn3.position.y=3.95;
+			cubeColumn4.position.y=3.95;
+			cubeCorridor1.position.y=2;
+			cubeCorridor2.position.y=2;
+			cubeCorridor3.position.y=2;
+			cubeCorridor4.position.y=2;
+			cubeTop1.position.y=7;
+			cubeTop2.position.y=8;
+			cubeTop3.position.y=9;
+			cubeTop4.position.y=10;
+			cubeTop5.position.y=11;
+			
+			cubeGlass.position.z=25;
+			cubeBase1.position.z=19;
+			cubeBase2.position.z=31;
+			cubeBase3.position.z=31;
+			cubeBase4.position.z=19;
+			cubeColumn1.position.z=19;
+			cubeColumn2.position.z=19;
+			cubeColumn3.position.z=31;
+			cubeColumn4.position.z=31;
+			cubeCorridor1.position.z=25;
+			cubeCorridor2.position.z=19;
+			cubeCorridor3.position.z=25;
+			cubeCorridor4.position.z=31;
+			cubeTop1.position.z=25;
+			cubeTop2.position.z=25;
+			cubeTop3.position.z=25;
+			cubeTop4.position.z=25;
+			cubeTop5.position.z=25;
+			
+			scene.add(cubeGlass);
+			scene.add(cubeBase1);
+			scene.add(cubeBase2);
+			scene.add(cubeBase3);
+			scene.add(cubeBase4);
+			scene.add(cubeColumn1);
+			scene.add(cubeColumn2);
+			scene.add(cubeColumn3);
+			scene.add(cubeColumn4);
+			scene.add(cubeCorridor1);
+			scene.add(cubeCorridor2);
+			scene.add(cubeCorridor3);
+			scene.add(cubeCorridor4);
+			scene.add(cubeTop1);
+			scene.add(cubeTop2);
+			scene.add(cubeTop3);
+			scene.add(cubeTop4);
+			scene.add(cubeTop5);
+			
+			//门卫
+			var cubeGeometry1 = new THREE.BoxGeometry(6, 1, 4);
+			var cubeGeometry2 = new THREE.BoxGeometry(13, 0.5, 0.5);
+			var cubeGeometry3 = new THREE.BoxGeometry(3, 4, 3);
+			var cubeGeometry4 = new THREE.BoxGeometry(10, 1, 6);
+			var cubeGeometry5 = new THREE.BoxGeometry(3, 8, 4);
+			var matArrayBase=[];
+			var matArrayRod=[];
+			var matArrayPillars=[]; 
+			var matArrayFlag=[];
+			matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+	        matArrayBase.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('shui.jpg')
+	        }));
+			
+			matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass2.png')
+	        }));
+	        matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass2.png')
+	        }));
+	        matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass2.png')
+	        }));
+	        matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass2.png')
+	        }));
+	        matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glassdoor.png')
+	        }));
+	        matArrayPillars.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/glass2.png')
+	        }));
+			
+			matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+	        matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/xiaoqu.jpg')
+	        }));
+	        matArrayFlag.push(new THREE.MeshBasicMaterial({
+		      map:new THREE.ImageUtils.loadTexture('Images/timg.jpg')
+	        }));
+			
+			matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+            matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+            matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+            matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+            matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+            matArrayRod.push(new THREE.MeshBasicMaterial({color: 0xffffff00}));
+			
+			var faceMaterial1 = new THREE.MeshFaceMaterial(matArrayBase);
+			var faceMaterial2 = new THREE.MeshFaceMaterial(matArrayRod);
+			var faceMaterial3 = new THREE.MeshFaceMaterial(matArrayPillars);
+			var faceMaterial4 = new THREE.MeshFaceMaterial(matArrayFlag);
+			
+			var cubeBase1=new THREE.Mesh(cubeGeometry1,faceMaterial1);
+			var cubeBase2=new THREE.Mesh(cubeGeometry1,faceMaterial1);
+			var cubeBase3=new THREE.Mesh(cubeGeometry4,faceMaterial1);
+			var cubeRod1=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+			var cubeRod2=new THREE.Mesh(cubeGeometry2,faceMaterial2);
+			var cubePillars1=new THREE.Mesh(cubeGeometry3,faceMaterial3);
+			var cubePillars2=new THREE.Mesh(cubeGeometry3,faceMaterial3);
+			var cubeFlag=new THREE.Mesh(cubeGeometry5,faceMaterial4);
+			
+			cubeBase1.position.x=-22;
+			cubeBase2.position.x=22;
+			cubeBase3.position.x=0;
+			cubeRod1.position.x=-14;
+			cubeRod2.position.x=14;
+			cubePillars1.position.x=-22;
+			cubePillars2.position.x=22;
+			cubeFlag.position.x=0;
+			
+			cubeBase1.position.y=0.5;
+			cubeBase2.position.y=0.5;
+			cubeBase3.position.y=0.5;
+			cubeRod1.position.y=2;
+			cubeRod2.position.y=2;
+			cubePillars1.position.y=3;
+			cubePillars2.position.y=3;
+			cubeFlag.position.y=5;
+			
+			cubeBase1.position.z=48;
+			cubeBase2.position.z=48;
+			cubeBase3.position.z=48;
+			cubeRod1.position.z=48;
+			cubeRod2.position.z=48;
+			cubePillars1.position.z=48;
+			cubePillars2.position.z=48;
+			cubeFlag.position.z=48;
+			
+			scene.add(cubeBase1);
+			scene.add(cubeBase2);
+			scene.add(cubeBase3);
+			scene.add(cubeRod1);
+			scene.add(cubeRod2);
+			scene.add(cubePillars1);
+			scene.add(cubePillars2);
+			scene.add(cubeFlag);
+	   
+	   
+	   id=requestAnimationFrame(draw);
+   }
+   
+   function createScene(geometry, materials){
+	   var material = new THREE.MeshBasicMaterial( {color: '#87CEEB', wireframe: false });
+	   var mesh=new THREE.Mesh(geometry,material);
+       mesh.scale.set(40,40,40);
+       mesh.position.set(0,60,0);
+	   scene.add(mesh);
+   }
+   
+   function draw(){
+      renderer.render(scene, camera);
+      id = requestAnimationFrame(draw);
+   }
+   
+</script>
+</head>
+
+<body onload="init()">
+  <canvas id="mainCanvas"></canvas>
+</body>
+</html>
